@@ -4,28 +4,11 @@ def validate_func_name(func_name):
     if func_name not in func_hash_map:
         raise ValueError('function is not found')
 
-def validate_floor_params(params):
-    ERROR_MESSAGE = 'floor function requires one parameter which type is int or floor'
-    if len(params) != 1:
+def validate_params(params):
+    ERROR_MESSAGE = 'params should be number list which length is two.'
+
+    if len(params) != 2:
         raise ValueError(ERROR_MESSAGE)
 
-    try:
-        return float(params[0])
-    except ValueError:
+    if type(params[0]) != float or type(params[1]) != float:
         raise ValueError(ERROR_MESSAGE)
-
-def validate_reverse_params(params):
-    ERROR_MESSAGE = 'reverse function requires one parameter which type is str'
-    if len(params) != 1:
-        raise ValueError(ERROR_MESSAGE)
-
-    if type(params[0]) != str:
-        raise ValueError(ERROR_MESSAGE)
-
-    return params[0]
-
-validate_func_hash_map = {
-    'func_name': validate_func_name,
-    'floor': validate_floor_params,
-    'reverse': validate_reverse_params,
-}

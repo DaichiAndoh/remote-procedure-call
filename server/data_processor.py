@@ -1,39 +1,37 @@
 import json
 from functions import func_hash_map
-from validations import validate_func_hash_map
+from validations import validate_func_name, validate_params
 
 class DataProcessor:
     _func_hash_map = func_hash_map
-    _validate_func_hash_map = validate_func_hash_map
 
     def __init__(self, connection, client_address):
         self.connection = connection
         self.client_address = client_address
-        self.recieved_data_json = ''
-        self.recieved_data_hash_map = {}
+        self.request_data_hash_map = {}
         print('\nconnection from', self.client_address)
 
-    def recieve_data(self):
-        recieved_data = self.connection.recv(16)
-        self.recieved_data_json += recieved_data.decode('utf-8')
+    def recieve_data_from_client(self):
+        request_data_str = ''
+        while True:
+            request_data = self.connection.recv(16)
+            request_data_str += request_data.decode('utf-8')
 
-    def all_data_received(self):
-        return 'end\n' in self.recieved_data_json
-
-    def parse_recieved_data(self):
-        temp_json = self.recieved_data_json.replace('end\n', '')
-        self.recieved_data_hash_map = json.loads(temp_json)
+            if 'end\n' in request_data_str:
+                temp_json = request_data_str.replace('end\n', '')
+                self.request_data_hash_map = json.loads(temp_json)
+                break
 
     def execute_function(self):
         try:
-            method = self.recieved_data_hash_map['method']
-            params = self.recieved_data_hash_map['params']
+            function_name = self.request_data_hash_map['function_name']
+            params = self.request_data_hash_map['params']
 
-            DataProcessor._validate_func_hash_map['func_name'](method)
+            validate_func_name(function_name)
+            validate_params(params)
 
-            func = DataProcessor._func_hash_map[method]
-            validate_func = DataProcessor._validate_func_hash_map[method]
-            result = func(validate_func(params))
+            func = DataProcessor._func_hash_map[function_name]
+            result = func(params[0], params[1])
 
             return str(result)
 
@@ -41,7 +39,9 @@ class DataProcessor:
             return 'error: {}'.format(e)
 
         except Exception as e:
+            print(e)
             return 'server error'
 
-    def send_to_client(self, response):
-        self.connection.sendall(response.encode('utf-8'))
+    def send_data_to_client(self, response_data):
+        response_data += 'end\n'
+        self.connection.sendall(response_data.encode('utf-8'))

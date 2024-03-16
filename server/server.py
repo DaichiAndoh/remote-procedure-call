@@ -2,7 +2,7 @@ from server_socket import ServerSocket
 from data_processor import DataProcessor
 
 # ソケット作成
-server_socket = ServerSocket('../socket/socket_file')
+server_socket = ServerSocket()
 
 # クライアントからの接続待機
 while True:
@@ -12,14 +12,12 @@ while True:
 
     # 指定された関数を実行
     try:
-        while True:
-            processor.recieve_data()
+        processor.recieve_data_from_client()
+        response_data = processor.execute_function()
+        processor.send_data_to_client(response_data)
 
-            if processor.all_data_received():
-                processor.parse_recieved_data()
-                response = processor.execute_function()
-                processor.send_to_client(response)
-                break
+    except Exception as e:
+        print(e)
 
     # 接続を閉じる
     finally:

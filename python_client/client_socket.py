@@ -26,6 +26,7 @@ class ClientSocket:
                     response_data += self.sock.recv(32).decode('utf-8')
 
                     if 'end\n' in response_data:
+                        response_data = response_data.replace('end\n', '')
                         break
 
                 return response_data

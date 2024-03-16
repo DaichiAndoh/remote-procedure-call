@@ -2,7 +2,7 @@ import os
 import socket
 
 class ServerSocket:
-    def __init__(self, server_address):
+    def __init__(self, server_address = '../socket/socket_file'):
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
         try:

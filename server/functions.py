@@ -1,12 +1,12 @@
 import math
 
-def floor(x: int):
-    return math.floor(x)
+def add(n1: int, n2: int):
+    return n1 + n2
 
-def reverse(s: str):
-    return s[::-1]
+def minus(n1: int, n2: int):
+    return n1 - n2
 
 func_hash_map = {
-    'floor': floor,
-    'reverse': reverse,
+    'add': add,
+    'minus': minus,
 }
