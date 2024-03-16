@@ -1,54 +1,30 @@
-import socket
-import sys
-import json
+from functions import Functions
+from validations import validate_input_number
 
-# UNIXソケットをストリームモードで作成
-sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-
-# サーバに接続
-try:
-    server_address = '../socket/socket_file'
-    print('connecting to {}'.format(server_address))
-    sock.connect(server_address)
-except socket.error as err:
-    print(err)
-    sys.exit(1)
-
-# サーバに接続できれば、サーバにメッセージを送信
-try:
-    # 実行する関数とその引数を標準入力から取得
-    input_method = input('please input function name you want to execute: ')
-    input_params = input('please input parameters separated by commas: ')
-    input_data = {
-        'method': input_method,
-        'params': input_params.split(','),
-    }
-    input_data_json = json.dumps(input_data) + 'end\n'
-    request_data = input_data_json.encode()
-
-    # サーバへ送信
-    sock.sendall(request_data)
-
-    # サーバからの応答待機時間を2秒間に設定
-    sock.settimeout(2)
-
-    # サーバからの応答待機
+def main():
     try:
+        num1 = None
+        num2 = None
+
         while True:
-            # サーバからデータを受信
-            # 最大32バイトのデータを読み込む
-            data = sock.recv(32).decode('utf-8')
-
-            if data:
-                print('server response: ' + data)
+            input_value = input('please input a number: ')
+            if validate_input_number(input_value):
+                if num1 is None:
+                    num1 = float(input_value)
+                else:
+                    num2 = float(input_value)
+                    break
             else:
-                break
+                print('inputed value is not invalid. please input again.')
 
-    # タイムアウトエラー時の処理
-    except socket.timeout:
-        print('socket timeout, ending listening for server messages')
+        functions = Functions()
+        print('add result:', functions.add(num1, num2))
+        print('minus result:', functions.minus(num1, num2))
 
-# 接続を閉じる
-finally:
-    print('closing socket\n')
-    sock.close()
+        print('process end')
+
+    except Exception as e:
+        print('error occurred: {}'.format(e))
+
+if __name__ == '__main__': 
+    main() 
