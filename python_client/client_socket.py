@@ -6,7 +6,7 @@ class ClientSocket:
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
         try:
-            print('connecting to {}'.format(server_address))
+            print('\nconnecting to {}'.format(server_address))
             self.sock.connect(server_address)
         except socket.error as err:
             raise SocketInitializeFaildError()
@@ -39,6 +39,7 @@ class ClientSocket:
 
     def close(self):
         if self.sock:
+            print('closing current connection')
             self.sock.close()
         else:
             raise SocketNotInitializedError()

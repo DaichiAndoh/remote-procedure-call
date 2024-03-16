@@ -5,7 +5,7 @@ def validate_func_name(func_name):
         raise ValueError('function is not found')
 
 def validate_params(params):
-    ERROR_MESSAGE = 'params should be number list which length is two.'
+    ERROR_MESSAGE = 'params should be number list which length is two'
 
     if len(params) != 2:
         raise ValueError(ERROR_MESSAGE)
