@@ -37,3 +37,9 @@ class Functions:
 
     def minus(self, n1, n2):
         return self._execute_function('minus', n1, n2)
+
+    def multiply(self, n1, n2):
+        return self._execute_function('multiply', n1, n2)
+
+    def divide(self, n1, n2):
+        return self._execute_function('divide', n1, n2)
