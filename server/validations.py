@@ -10,5 +10,5 @@ def validate_params(params):
     if len(params) != 2:
         raise ValueError(ERROR_MESSAGE)
 
-    if type(params[0]) != float or type(params[1]) != float:
+    if not isinstance(params[0], (int, float)) or not isinstance(params[1], (int, float)):
         raise ValueError(ERROR_MESSAGE)

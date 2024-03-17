@@ -11,10 +11,11 @@ def main():
         while True:
             input_value = input('please input a number: ')
             if validate_input_number(input_value):
+                floatValue = float(input_value)
                 if n1 is None:
-                    n1 = float(input_value)
+                    n1 = int(input_value) if floatValue.is_integer() else floatValue
                 else:
-                    n2 = float(input_value)
+                    n2 = int(input_value) if floatValue.is_integer() else floatValue
                     break
             else:
                 print('inputed value is not invalid. please input again')
