@@ -1,4 +1,4 @@
-const ClientSocket = require('./client-socket');
+const ClientSocket = require('./client_socket');
 
 class Functions {
   _craeteRequestData(requestDataObj) {
